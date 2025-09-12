@@ -1,5 +1,4 @@
-const userName = "Gabriel";
-console.log(userName);
+let currentResult = 20;
+currentResult = currentResult + 10;
 
-userName = "Toussaint";
-console.log(userName);
+outputResult(currentResult, '');
