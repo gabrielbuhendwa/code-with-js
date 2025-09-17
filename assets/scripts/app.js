@@ -36,7 +36,7 @@ function calculateResult(calculationType) {
     calculationType !== 'SUBTRACT' &&
     calculationType !== 'MULTIPLY' &&
     calculationType !== 'DIVIDE' ||
-    !enteredNumber
+    !enteredNumber //stop an return if the input is not a number, empty  or 0
   ) {
     return;
   }
