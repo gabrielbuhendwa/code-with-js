@@ -4,19 +4,25 @@ const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
-//these variables will hold the max life and current health of player and monster
+//these variables will hold the max life and current health of player and monster and also the bonus life
 let chosenMaxLife = 100;
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
-
+let hasBonusLife = true;//this is for the bonus life
 //get the attack button from the DOM
 adjustHealthBars(chosenMaxLife);
 
 //this fonction will handle the end round logic for player and monster
 function endRound(){
     //deal damage to player 
+    const initialPlayerHealth = currentPlayerHealth;//this will store the initial health of player before the monster attack
     const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
-    currentPlayerHealth -= playerDamage;
+    currentPlayerHealth -= playerDamage;//this will reduce the current health of player by the damage dealt by monster
+    if (currentPlayerHealth <= 0 && hasBonusLife){//this will check if player health is less than or equal to 0 and if he has bonus life
+        hasBonusLife = false;//we set the bonus life to false because it already used
+        removeBonusLife();
+    }
+    //this will check the health of player and monster to determine the winner
     if (currentMonsterHealth <= 0 && currentPlayerHealth > 0){
         alert("congrats you won");
     }else if (currentPlayerHealth <=0 && currentMonsterHealth > 0){
