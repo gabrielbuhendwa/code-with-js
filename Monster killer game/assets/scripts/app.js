@@ -48,7 +48,7 @@ function strongAttackHandler(){
     attackMonster('STRONG_ATTACK');
 }
 
-//function to handle heal button click for player
+//this function make sure that player does not heal to more than his initial max health, and also heals the player
 function healPlayerHandler(){
     let healValue;
     if(currentPlayerHealth >= chosenMaxLife - HEAL_VALUE)//basically this means if the current health of player is greater than or equal to max life - heal value that means we cant heal the player to more than his max initial health
@@ -64,7 +64,7 @@ function healPlayerHandler(){
     endRound();
 }
 
-//add event listener to attack button and strong attack button
+//event listeners for attack, strong attack and heal buttons
 attackBtn.addEventListener('click', attackHandler);
 strongAttackBtn.addEventListener('click', strongAttackHandler);
 healBtn.addEventListener('click', healPlayerHandler);
