@@ -1,77 +1,77 @@
-//these constants will hold the values for attack, strong attack, monster attack and heal
+//these are the constants that define the values for attacks and healing
 const ATTACK_VALUE = 10;
 const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
-//these variables will hold the max life and current health of player and monster and also the bonus life
+//these are the variables that will hold the current health values
 let chosenMaxLife = 100;
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
-let hasBonusLife = true;//this is for the bonus life
-//get the attack button from the DOM
+let hasBonusLife = true;
+
+//function to get the maximum life value from the user
 adjustHealthBars(chosenMaxLife);
 
-//this fonction will handle the end round logic for player and monster
-function endRound(){
-    //deal damage to player 
-    const initialPlayerHealth = currentPlayerHealth;//this will store the initial health of player before the monster attack
-    const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
-    currentPlayerHealth -= playerDamage;//this will reduce the current health of player by the damage dealt by monster
-    if (currentPlayerHealth <= 0 && hasBonusLife){//this will check if player health is less than or equal to 0 and if he has bonus life
-        hasBonusLife = false;//we set the bonus life to false because it already used
-        removeBonusLife();
-    }
-    //this will check the health of player and monster to determine the winner
-    if (currentMonsterHealth <= 0 && currentPlayerHealth > 0){
-        alert("congrats you won");
-    }else if (currentPlayerHealth <=0 && currentMonsterHealth > 0){
-        alert("Oh, saddly you lost");
-    }else if(currentPlayerHealth <= 0 && currentMonsterHealth <= 0){
-        alert("this case is a draw");
-    }
+//this block handles the end of each round
+function endRound() {
+  const initialPlayerHealth = currentPlayerHealth;//to save the player's health before the monster attacks
+  const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);//monster attacks the player
+  currentPlayerHealth -= playerDamage; //update the player's health
+
+  //this block checks if the player has a bonus life and uses it if necessary
+  if (currentPlayerHealth <= 0 && hasBonusLife) {
+    hasBonusLife = false; //this ensures the bonus life is only used once
+    removeBonusLife();//remove the bonus life from the UI after use
+    currentPlayerHealth = initialPlayerHealth;//restore player's health
+    setPlayerHealth(initialPlayerHealth);//set the player's health in the UI
+    alert('You would be dead but the bonus life saved you!');
+  }
+  //this block checks the win/loss/draw conditions
+  if (currentMonsterHealth <= 0 && currentPlayerHealth > 0) {
+    alert('congratulations, you won');
+  } else if (currentPlayerHealth <= 0 && currentMonsterHealth > 0) {
+    alert('Oh, sorry you lost');
+  } else if (currentPlayerHealth <= 0 && currentMonsterHealth <= 0) {
+    alert('Damn, you have a draw');
+  }
 }
 
-//function to handle attack and strong attack logic for player and monster
-function attackMonster(mode){
-    let maxDamage;
-    if(mode === 'ATTACK'){
-        maxDamage = ATTACK_VALUE;
-    }else if(mode === 'STRONG_ATTACK'){
-        maxDamage = STRONG_ATTACK_VALUE;
-    }
-    //deal damage to monster and player
-    const damage = dealMonsterDamage(maxDamage);
-    currentMonsterHealth -= damage; 
-    endRound();
+//this function handles the player's attack actions and the monster's counterattack
+function attackMonster(mode) {
+  let maxDamage;
+  if (mode === 'ATTACK') {
+    maxDamage = ATTACK_VALUE;
+  } else if (mode === 'STRONG_ATTACK') {
+    maxDamage = STRONG_ATTACK_VALUE;
+  }
+  const damage = dealMonsterDamage(maxDamage); //player attacks the monster
+  currentMonsterHealth -= damage;//update the monster's health
+  endRound();//end the round and let the monster attack back
 }
-//fuction to handle attack button click for player and monster
-function attackHandler(){
-    attackMonster('ATTACK'); 
-} 
-//function to handle strong attack button click for player and monster
-function strongAttackHandler(){
-    attackMonster('STRONG_ATTACK');
+//this function handles the attack button click
+function attackHandler() {
+  attackMonster('ATTACK');
 }
-
-//this function make sure that player does not heal to more than his initial max health, and also heals the player
-function healPlayerHandler(){
-    let healValue;
-    if(currentPlayerHealth >= chosenMaxLife - HEAL_VALUE)//basically this means if the current health of player is greater than or equal to max life - heal value that means we cant heal the player to more than his max initial health
-    {
-        alert("lesten you can't heal to more than your max initial health");
-        healValue = chosenMaxLife - currentPlayerHealth;//this will heal the player to his max initial health
-    }else{
-        healValue = HEAL_VALUE;//the else bring the heal value to the constant heal value
-    }
-    //these code does the actual healing of player
-    increasePlayerHealth(healValue);
-    currentPlayerHealth += healValue;
-    endRound();
+//this function handles the strong attack button click
+function strongAttackHandler() {
+  attackMonster('STRONG_ATTACK');
 }
-
-//event listeners for attack, strong attack and heal buttons
+//this function handles the heal button click
+function healPlayerHandler() {
+  let healValue;
+  if (currentPlayerHealth >= chosenMaxLife - HEAL_VALUE) {//
+    alert("You can't heal to more than your max initial health.");
+    healValue = chosenMaxLife - currentPlayerHealth;//heal only the amount needed to reach max health
+  } else {
+    healValue = HEAL_VALUE;//heal the full heal value
+  }
+  //here we increase the player's health
+  increasePlayerHealth(healValue);
+  currentPlayerHealth += healValue;
+  endRound();//end the round and let the monster attack back
+}
+//down here we set up the event listeners for the buttons
 attackBtn.addEventListener('click', attackHandler);
 strongAttackBtn.addEventListener('click', strongAttackHandler);
 healBtn.addEventListener('click', healPlayerHandler);
-
