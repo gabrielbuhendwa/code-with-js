@@ -1,10 +1,10 @@
-//contants to hold attack values for player and monster 
+//these constants will hold the values for attack, strong attack, monster attack and heal
 const ATTACK_VALUE = 10;
 const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
-//variables to hold max life and current life of player and monster
+//these variables will hold the max life and current health of player and monster
 let chosenMaxLife = 100;
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
@@ -53,11 +53,14 @@ function healPlayerHandler(){
     let healValue;
     if(currentPlayerHealth >= chosenMaxLife - HEAL_VALUE)//basically this means if the current health of player is greater than or equal to max life - heal value that means we cant heal the player to more than his max initial health
     {
-        alert("you can't heal to more than your max initial health");
-        healValue = chosenMaxLife - currentPlayerHealth;
+        alert("lesten you can't heal to more than your max initial health");
+        healValue = chosenMaxLife - currentPlayerHealth;//this will heal the player to his max initial health
+    }else{
+        healValue = HEAL_VALUE;//the else bring the heal value to the constant heal value
     }
-    increasePlayerHealth(HEAL_VALUE);
-    currentPlayerHealth += HEAL_VALUE;
+    //these code does the actual healing of player
+    increasePlayerHealth(healValue);
+    currentPlayerHealth += healValue;
     endRound();
 }
 
