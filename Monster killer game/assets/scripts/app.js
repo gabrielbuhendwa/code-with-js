@@ -40,7 +40,14 @@ function attackHandler(){
 function strongAttackHandler(){
     attackMonster('STRONG_ATTACK');
 }
+
+//function to handle heal button click for player
+function healPlayerHandler(){
+
+}
+
 //add event listener to attack button and strong attack button
 attackBtn.addEventListener('click', attackHandler);
 strongAttackBtn.addEventListener('click', strongAttackHandler);
+healBtn.addEventListener('click', healPlayerHandler);
 
