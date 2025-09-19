@@ -4,8 +4,18 @@ const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
+//this is a dialog that allows user to enter something in js and it returns that value
+ const enteredValue = prompt ('Maximum life for you and the monster', '100');
+
+
+
 //these are the variables that will hold the current health values
-let chosenMaxLife = 100;
+let chosenMaxLife = parseInt(enteredValue);//convert the entered value to an integer the entered value is a string by default and is the user's input
+
+if(isNaN(chosenMaxLife)){
+  chosenMaxLife = 100;//if the user enters an invalid number, then the default value will be 100
+}
+
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
 let hasBonusLife = true;
