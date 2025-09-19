@@ -1,100 +1,184 @@
-//these are the constants that define the values for attacks and healing 
 const ATTACK_VALUE = 10;
 const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
-//In order to avoid errors due to typos, we can define constants for the modes of attack, typos means that if we mistype a string somewhere in the code, it can lead to bugs that are hard to track down. By using constants, we ensure consistency and reduce the risk of such errors.
-const MODE_ATTACK = 'ATTACK';
-const MODE_STRONG_ATTACK = 'STRONG_ATTACK';
+const MODE_ATTACK = 'ATTACK'; 
+const MODE_STRONG_ATTACK = 'STRONG_ATTACK'; 
+const LOG_EVENT_PLAYER_ATTACK = 'PLAYER_ATTACK';
+const LOG_EVENT_PLAYER_STRONG_ATTACK = 'PLAYER_STRONG_ATTACK';
+const LOG_EVENT_MONSTER_ATTACK = 'MONSTER_ATTACK';
+const LOG_EVENT_PLAYER_HEAL = 'PLAYER_HEAL';
+const LOG_EVENT_GAME_OVER = 'GAME_OVER';
 
-//this is a dialog that allows user to enter something in js and it returns that value
- const enteredValue = prompt ('Maximum life for you and the monster', '100');
+const enteredValue = prompt('Maximum life for you and the monster.', '100');
 
-//these are the variables that will hold the current health values
-let chosenMaxLife = parseInt(enteredValue);//convert the entered value to an integer the entered value is a string by default and is the user's input
+let chosenMaxLife = parseInt(enteredValue);
+let battleLog = [];
 
-if(isNaN(chosenMaxLife) || chosenMaxLife <= 0){ //check if the entered value is not a number
-  chosenMaxLife = 100;//if the user enters an invalid number, then the default value will be 100
+if (isNaN(chosenMaxLife) || chosenMaxLife <= 0) {
+  chosenMaxLife = 100;
 }
 
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
 let hasBonusLife = true;
 
-//function to get the maximum life value from the user
 adjustHealthBars(chosenMaxLife);
 
-//this function resets the game state after a win/loss/draw
+function writeToLog(ev, val, monsterHealth, playerHealth) {
+  let logEntry = {
+    event: ev,
+    value: val,
+    finalMonsterHealth: monsterHealth,
+    finalPlayerHealth: playerHealth
+  };
+  if (ev === LOG_EVENT_PLAYER_ATTACK) {
+    logEntry.target = 'MONSTER';
+  } else if (ev === LOG_EVENT_PLAYER_STRONG_ATTACK) {
+    logEntry = {
+      event: ev,
+      value: val,
+      target: 'MONSTER',
+      finalMonsterHealth: monsterHealth,
+      finalPlayerHealth: playerHealth
+    };
+  } else if (ev === LOG_EVENT_MONSTER_ATTACK) {
+    logEntry = {
+      event: ev,
+      value: val,
+      target: 'PLAYER',
+      finalMonsterHealth: monsterHealth,
+      finalPlayerHealth: playerHealth
+    };
+  } else if (ev === LOG_EVENT_PLAYER_HEAL) {
+    logEntry = {
+      event: ev,
+      value: val,
+      target: 'PLAYER',
+      finalMonsterHealth: monsterHealth,
+      finalPlayerHealth: playerHealth
+    };
+  } else if (ev === LOG_EVENT_GAME_OVER) {
+    logEntry = {
+      event: ev,
+      value: val,
+      finalMonsterHealth: monsterHealth,
+      finalPlayerHealth: playerHealth
+    };
+  }
+  battleLog.push(logEntry);
+}
+
 function reset() {
   currentMonsterHealth = chosenMaxLife;
   currentPlayerHealth = chosenMaxLife;
   resetGame(chosenMaxLife);
 }
-//this block handles the end of each round
-function endRound() {
-  const initialPlayerHealth = currentPlayerHealth;//to save the player's health before the monster attacks
-  const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);//monster attacks the player
-  currentPlayerHealth -= playerDamage; //update the player's health
 
-  //this block checks if the player has a bonus life and uses it if necessary
+function endRound() {
+  const initialPlayerHealth = currentPlayerHealth;
+  const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
+  currentPlayerHealth -= playerDamage;
+  writeToLog(
+    LOG_EVENT_MONSTER_ATTACK,
+    playerDamage,
+    currentMonsterHealth,
+    currentPlayerHealth
+  );
+
   if (currentPlayerHealth <= 0 && hasBonusLife) {
-    hasBonusLife = false; //this ensures the bonus life is only used once
-    removeBonusLife();//remove the bonus life from the UI after use
-    currentPlayerHealth = initialPlayerHealth;//restore player's health
-    setPlayerHealth(initialPlayerHealth);//set the player's health in the UI
+    hasBonusLife = false;
+    removeBonusLife();
+    currentPlayerHealth = initialPlayerHealth;
+    setPlayerHealth(initialPlayerHealth);
     alert('You would be dead but the bonus life saved you!');
   }
-  //this block checks the win/loss/draw conditions
+
   if (currentMonsterHealth <= 0 && currentPlayerHealth > 0) {
-    alert('congratulations, you won');
+    alert('You won!');
+    writeToLog(
+      LOG_EVENT_GAME_OVER,
+      'PLAYER WON',
+      currentMonsterHealth,
+      currentPlayerHealth
+    );
   } else if (currentPlayerHealth <= 0 && currentMonsterHealth > 0) {
-    alert('Oh, sorry you lost');
+    alert('You lost!');
+    writeToLog(
+      LOG_EVENT_GAME_OVER,
+      'MONSTER WON',
+      currentMonsterHealth,
+      currentPlayerHealth
+    );
   } else if (currentPlayerHealth <= 0 && currentMonsterHealth <= 0) {
-    alert('Damn, you have a draw');
-  }
-  //if the game is over, reset the game state
-  if (currentMonsterHealth <= 0 || currentPlayerHealth <= 0) {//check if either the player or monster has no health left
-    reset();//reset the game state
+    alert('You have a draw!');
+    writeToLog(
+      LOG_EVENT_GAME_OVER,
+      'A DRAW',
+      currentMonsterHealth,
+      currentPlayerHealth
+    );
   }
 
+  if (currentMonsterHealth <= 0 || currentPlayerHealth <= 0) {
+    reset();
+  }
 }
 
-//this function handles the player's attack actions and the monster's counterattack
 function attackMonster(mode) {
   let maxDamage;
+  let logEvent;
   if (mode === MODE_ATTACK) {
     maxDamage = ATTACK_VALUE;
+    logEvent = LOG_EVENT_PLAYER_ATTACK;
   } else if (mode === MODE_STRONG_ATTACK) {
     maxDamage = STRONG_ATTACK_VALUE;
+    logEvent = LOG_EVENT_PLAYER_STRONG_ATTACK;
   }
-  const damage = dealMonsterDamage(maxDamage); //player attacks the monster
-  currentMonsterHealth -= damage;//update the monster's health
-  endRound();//end the round and let the monster attack back
+  const damage = dealMonsterDamage(maxDamage);
+  currentMonsterHealth -= damage;
+  writeToLog(
+    logEvent,
+    damage,
+    currentMonsterHealth,
+    currentPlayerHealth
+  );
+  endRound();
 }
-//this function handles the attack button click
+
 function attackHandler() {
   attackMonster(MODE_ATTACK);
 }
-//this function handles the strong attack button click
+
 function strongAttackHandler() {
   attackMonster(MODE_STRONG_ATTACK);
 }
-//this function handles the heal button click
+
 function healPlayerHandler() {
   let healValue;
-  if (currentPlayerHealth >= chosenMaxLife - HEAL_VALUE) {//
+  if (currentPlayerHealth >= chosenMaxLife - HEAL_VALUE) {
     alert("You can't heal to more than your max initial health.");
-    healValue = chosenMaxLife - currentPlayerHealth;//heal only the amount needed to reach max health
+    healValue = chosenMaxLife - currentPlayerHealth;
   } else {
-    healValue = HEAL_VALUE;//heal the full heal value
+    healValue = HEAL_VALUE;
   }
-  //here we increase the player's health
   increasePlayerHealth(healValue);
   currentPlayerHealth += healValue;
-  endRound();//end the round and let the monster attack back
+  writeToLog(
+    LOG_EVENT_PLAYER_HEAL,
+    healValue,
+    currentMonsterHealth,
+    currentPlayerHealth
+  );
+  endRound();
 }
-//down here we set up the event listeners for the buttons
+
+function printLogHandler() {
+  console.log(battleLog);
+}
+
 attackBtn.addEventListener('click', attackHandler);
 strongAttackBtn.addEventListener('click', strongAttackHandler);
 healBtn.addEventListener('click', healPlayerHandler);
+logBtn.addEventListener('click', printLogHandler);
