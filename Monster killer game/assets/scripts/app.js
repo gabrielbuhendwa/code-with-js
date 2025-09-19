@@ -12,7 +12,7 @@ const HEAL_VALUE = 20;
 //these are the variables that will hold the current health values
 let chosenMaxLife = parseInt(enteredValue);//convert the entered value to an integer the entered value is a string by default and is the user's input
 
-if(isNaN(chosenMaxLife)){
+if(isNaN(chosenMaxLife) || chosenMaxLife <= 0){ //check if the entered value is not a number
   chosenMaxLife = 100;//if the user enters an invalid number, then the default value will be 100
 }
 
