@@ -1,4 +1,4 @@
-//these are the constants that define the values for attacks and healing
+//these are the constants that define the values for attacks and healing 
 const ATTACK_VALUE = 10;
 const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
@@ -13,6 +13,12 @@ let hasBonusLife = true;
 //function to get the maximum life value from the user
 adjustHealthBars(chosenMaxLife);
 
+//this function resets the game state after a win/loss/draw
+function reset() {
+  currentMonsterHealth = chosenMaxLife;
+  currentPlayerHealth = chosenMaxLife;
+  resetGame(chosenMaxLife);
+}
 //this block handles the end of each round
 function endRound() {
   const initialPlayerHealth = currentPlayerHealth;//to save the player's health before the monster attacks
@@ -35,6 +41,11 @@ function endRound() {
   } else if (currentPlayerHealth <= 0 && currentMonsterHealth <= 0) {
     alert('Damn, you have a draw');
   }
+  //if the game is over, reset the game state
+  if (currentMonsterHealth <= 0 || currentPlayerHealth <= 0) {//check if either the player or monster has no health left
+    reset();//reset the game state
+  }
+
 }
 
 //this function handles the player's attack actions and the monster's counterattack
