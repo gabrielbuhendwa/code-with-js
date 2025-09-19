@@ -4,10 +4,12 @@ const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
+//In order to avoid errors due to typos, we can define constants for the modes of attack, typos means that if we mistype a string somewhere in the code, it can lead to bugs that are hard to track down. By using constants, we ensure consistency and reduce the risk of such errors.
+const MODE_ATTACK = 'ATTACK';
+const MODE_STRONG_ATTACK = 'STRONG_ATTACK';
+
 //this is a dialog that allows user to enter something in js and it returns that value
  const enteredValue = prompt ('Maximum life for you and the monster', '100');
-
-
 
 //these are the variables that will hold the current health values
 let chosenMaxLife = parseInt(enteredValue);//convert the entered value to an integer the entered value is a string by default and is the user's input
@@ -61,9 +63,9 @@ function endRound() {
 //this function handles the player's attack actions and the monster's counterattack
 function attackMonster(mode) {
   let maxDamage;
-  if (mode === 'ATTACK') {
+  if (mode === MODE_ATTACK) {
     maxDamage = ATTACK_VALUE;
-  } else if (mode === 'STRONG_ATTACK') {
+  } else if (mode === MODE_STRONG_ATTACK) {
     maxDamage = STRONG_ATTACK_VALUE;
   }
   const damage = dealMonsterDamage(maxDamage); //player attacks the monster
@@ -72,11 +74,11 @@ function attackMonster(mode) {
 }
 //this function handles the attack button click
 function attackHandler() {
-  attackMonster('ATTACK');
+  attackMonster(MODE_ATTACK);
 }
 //this function handles the strong attack button click
 function strongAttackHandler() {
-  attackMonster('STRONG_ATTACK');
+  attackMonster(MODE_STRONG_ATTACK);
 }
 //this function handles the heal button click
 function healPlayerHandler() {
