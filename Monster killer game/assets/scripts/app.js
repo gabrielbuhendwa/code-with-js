@@ -33,7 +33,6 @@ function writeToLog(ev, val, monsterHealth, playerHealth) {
     finalMonsterHealth: monsterHealth,
     finalPlayerHealth: playerHealth
   };
-  //using switch statement instead of if else, which is better when there are multiple conditions
   switch (ev) {
     case LOG_EVENT_PLAYER_ATTACK:
       logEntry.target = 'MONSTER';
@@ -168,7 +167,7 @@ function endRound() {
     reset();
   }
 }
-//using ternary operator to simplify the code when it comes to if else statement
+
 function attackMonster(mode) {
   const maxDamage = mode === MODE_ATTACK ? ATTACK_VALUE : STRONG_ATTACK_VALUE;
   const logEvent =
@@ -216,7 +215,24 @@ function healPlayerHandler() {
 }
 
 function printLogHandler() {
-  console.log(battleLog);
+  for (let i = 0; i < 3; i++) {
+    console.log('------------');
+  }
+  // for (let i = 10; i > 0;) {
+  //   i--;
+  //   console.log(i);
+  // }
+  // for (let i = 0; i < battleLog.length; i++) {
+  //   console.log(battleLog[i]);
+  // }
+  let i = 0;
+  for (const logEntry of battleLog) {
+    console.log(`#${i}`);
+    for (const key in logEntry) {
+      console.log(`${key} => ${logEntry[key]}`);
+    }
+    i++;
+  }
 }
 
 attackBtn.addEventListener('click', attackHandler);
