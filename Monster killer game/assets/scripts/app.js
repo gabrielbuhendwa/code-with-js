@@ -3,21 +3,36 @@ const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
-const MODE_ATTACK = 'ATTACK'; // MODE_ATTACK = 0
-const MODE_STRONG_ATTACK = 'STRONG_ATTACK'; // MODE_STRONG_ATTACK = 1
+const MODE_ATTACK = 'ATTACK'; 
+const MODE_STRONG_ATTACK = 'STRONG_ATTACK'; 
 const LOG_EVENT_PLAYER_ATTACK = 'PLAYER_ATTACK';
 const LOG_EVENT_PLAYER_STRONG_ATTACK = 'PLAYER_STRONG_ATTACK';
 const LOG_EVENT_MONSTER_ATTACK = 'MONSTER_ATTACK';
 const LOG_EVENT_PLAYER_HEAL = 'PLAYER_HEAL';
 const LOG_EVENT_GAME_OVER = 'GAME_OVER';
 
-const enteredValue = prompt('Maximum life for you and the monster.', '100');
-
-let chosenMaxLife = parseInt(enteredValue);
 let battleLog = [];
+let lastLoggedEntry;
 
-if (isNaN(chosenMaxLife) || chosenMaxLife <= 0) {
+function getMaxLifeValues() {
+  const enteredValue = prompt('Maximum life for you and the monster.', '100');
+
+  const parsedValue = parseInt(enteredValue);
+  if (isNaN(parsedValue) || parsedValue <= 0) {
+    throw { message: 'Invalid user input, not a number!' };
+  }
+  return parsedValue;
+}
+
+let chosenMaxLife;
+
+try {
+  chosenMaxLife = getMaxLifeValues();
+} catch (error) {
+  console.log(error);
   chosenMaxLife = 100;
+  alert('You entered something wrong, default value of 100 was used.');
+  // throw error;
 }
 
 let currentMonsterHealth = chosenMaxLife;
@@ -218,11 +233,18 @@ function printLogHandler() {
   for (let i = 0; i < 3; i++) {
     console.log('------------');
   }
-  let j = 3;
-  do {
-    console.log(j);
-    j++;
-  } while (j < 3);
+  let j = 0;
+  // outerWhile: do {
+  //   console.log('Outer', j);
+  //   innerFor: for (let k = 0; k < 5; k++) {
+  //     if (k === 3) {
+  //       // break outerWhile;
+  //       // continue outerWhile; // dangerous! => Infinite loop!
+  //     }
+  //     console.log('Inner', k);
+  //   }
+  //   j++;
+  // } while (j < 3);
   // for (let i = 10; i > 0;) {
   //   i--;
   //   console.log(i);
@@ -232,9 +254,13 @@ function printLogHandler() {
   // }
   let i = 0;
   for (const logEntry of battleLog) {
-    console.log(`#${i}`);
-    for (const key in logEntry) {
-      console.log(`${key} => ${logEntry[key]}`);
+    if ((!lastLoggedEntry && lastLoggedEntry !== 0) || lastLoggedEntry < i) {
+      console.log(`#${i}`);
+      for (const key in logEntry) {
+        console.log(`${key} => ${logEntry[key]}`);
+      }
+      lastLoggedEntry = i;
+      break;
     }
     i++;
   }
