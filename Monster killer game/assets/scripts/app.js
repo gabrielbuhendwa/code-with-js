@@ -1,8 +1,10 @@
+//these constants determine the damage and healing values
 const ATTACK_VALUE = 10;
 const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
+//these constants determine the mode of attack
 const MODE_ATTACK = 'ATTACK'; 
 const MODE_STRONG_ATTACK = 'STRONG_ATTACK'; 
 const LOG_EVENT_PLAYER_ATTACK = 'PLAYER_ATTACK';
