@@ -13,6 +13,7 @@ const LOG_EVENT_MONSTER_ATTACK = 'MONSTER_ATTACK';
 const LOG_EVENT_PLAYER_HEAL = 'PLAYER_HEAL';
 const LOG_EVENT_GAME_OVER = 'GAME_OVER';
 
+//this one is for storing the battle log, which is an array of objects, that means each entry in the array is an object
 let battleLog = [];
 let lastLoggedEntry;
 
