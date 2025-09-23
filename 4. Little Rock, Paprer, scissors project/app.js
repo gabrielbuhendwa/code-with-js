@@ -16,11 +16,14 @@ const getPlayerChoice = function(){
     selection !== PAPER && 
     selection !== SCISSORS
   ) {
-    alert(`Invalid choice! we chose ${ROCK} for you`);
+    alert(`Invalid choice! we chose ${DEFAULT_USER_CHOICE} for you`);
+    return DEFAULT_USER_CHOICE;
   }
-
+  return selection;
 }
 
 startGameBtn.addEventListener('click', function() {
   console.log('Game is starting...');
+  const playerChoice = getPlayerChoice();
+  console.log('Player choice:', playerChoice);
 });
