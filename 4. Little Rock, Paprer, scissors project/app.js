@@ -1,8 +1,8 @@
 const startGameBtn = document.getElementById('start-game-btn');
 
-const start = function() {
-  console.log('Game is starting...');
-};
+// const start = function() {
+//   console.log('Game is starting...');
+// };
 
 // const person = {
 //   name: 'Max',
@@ -14,6 +14,9 @@ const start = function() {
 // person.greet();
 
 // console.dir(startGame);
-//for choices 
 
-startGameBtn.addEventListener('click', start);
+
+//here we used what we called anonymous function that means that we don't have a name for the function
+startGameBtn.addEventListener('click', function() {
+  console.log('Game is starting...');
+});
