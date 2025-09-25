@@ -1,14 +1,29 @@
-//selecting the add modal 
 const addMovieModal = document.getElementById('add-modal');
-
-//selecting the first-add button
+// const addMovieModal = document.querySelector('#add-modal');
+// const addMovieModal = document.body.children[1];
 const startAddMovieButton = document.querySelector('header button');
+// const startAddMovieButton = document.querySelector('header').lastElementChild;
+const backdrop = document.getElementById('backdrop');
+// const backdrop = document.body.firstElementChild;
+const cancelAddMovieButton = addMovieModal.querySelector('.btn--passive');
 
-//creating function for the event Listener 
-const toggleMovieModal = () => {
-    //here we are toggling the class visible in order to show and hide the modal
-     
-}  
+const toggleBackdrop = () => {
+  backdrop.classList.toggle('visible');
+};
 
-//adding an event Listener to the buttom in order to manupilate it 
-startAddMovieButton.addEventListener('click', toggleMovieModal )
+const toggleMovieModal = () => { // function() {}
+  addMovieModal.classList.toggle('visible');
+  toggleBackdrop();
+};
+
+const cancelAddMovie = () => {
+  toggleMovieModal();
+};
+
+const backdropClickHandler = () => {
+  toggleMovieModal();
+};
+
+startAddMovieButton.addEventListener('click', toggleMovieModal);
+backdrop.addEventListener('click', toggleMovieModal);
+cancelAddMovieButton.addEventListener('click', cancelAddMovie)
