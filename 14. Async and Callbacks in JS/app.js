@@ -7,7 +7,9 @@ const getPosition = opts => {
       success => {
         resolve(success);
       },
-      error => {},
+      error => {
+        reject(error);
+      },
       opts
     );
   });
@@ -23,16 +25,29 @@ const setTimer = duration => {
   return promise;
 };
 
-function trackUserHandler() {
+async function trackUserHandler() {
   let positionData;
-  getPosition()
-    .then(posData => {
-      positionData = posData;
-      return setTimer(2000);
-    })
-    .then(data => {
-      console.log(data, positionData);
-    });
+  let posData;
+  let timerData;
+  try {
+    posData = await getPosition();
+    timerData = await setTimer(2000);
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(timerData, posData);
+  // getPosition()
+  //   .then(posData => {
+  //     positionData = posData;
+  //     return setTimer(2000);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //     return 'on we go...';
+  //   })
+  //   .then(data => {
+  //     console.log(data, positionData);
+  //   });
   setTimer(1000).then(() => {
     console.log('Timer done!');
   });
