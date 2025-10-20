@@ -1,14 +1,14 @@
 {
-  "name": "16.-js-modules",
+  "name": "javascript-complete-guide",
   "version": "1.0.0",
-  "description": "js tooling and workflows",
+  "description": "JavaScript - The Complete Guide",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Gabriel Buhendwa",
+  "author": "Maximilian Schwarzmueller",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^9.38.0"
+    "eslint": "^6.4.0"
   }
 }
