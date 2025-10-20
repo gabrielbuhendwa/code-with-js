@@ -1,0 +1,14 @@
+{
+  "name": "16.-js-modules",
+  "version": "1.0.0",
+  "description": "js tooling and workflows",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel Buhendwa",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^9.38.0"
+  }
+}
