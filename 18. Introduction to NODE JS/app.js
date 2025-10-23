@@ -8,4 +8,10 @@ fs.readFile('user-data.txt', (err, data) => {
   console.log(data.toString());
 });
 
-
+fs.writeFile('user-data.txt', 'username=Max', err => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('Wrote to file!');
+  }
+});
